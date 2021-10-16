@@ -8,7 +8,6 @@ namespace ORFU21_Factorio_v1
         {
             bool isRunning = true;
             Inventory initInventory = new Inventory();
-            //Factory initFactory = new Factory();
             initInventory.AddDefaultInventory();
 
             while (isRunning)
@@ -31,7 +30,3 @@ namespace ORFU21_Factorio_v1
         }
     }
 }
-
-//--Initalise Inventory
-//--Display Inventory
-//--Add to Inventory
