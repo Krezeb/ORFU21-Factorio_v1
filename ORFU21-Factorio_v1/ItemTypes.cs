@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ORFU21_Factorio_v1
 {
-    public enum ItemTypes
+    public enum ItemTypesEnum
     {
         //[Description("Wood")] Wood = 1,
         //[Description("Glass")] Glass = 2,

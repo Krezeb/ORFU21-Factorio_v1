@@ -15,5 +15,13 @@ namespace ORFU21_Factorio_v1
             FieldInfo fieldInfo = input.GetType().GetField(input.ToString());
             return input.ToString();
         }
+        public static void GetEnumValue()
+        {
+            int woodValue = (int)ItemTypesEnum.Wood;
+            int glassValue = (int)ItemTypesEnum.Glass;
+            int rubberValue = (int)ItemTypesEnum.Rubber;
+            int metalValue = (int)ItemTypesEnum.Metal;
+        }
+
     }
 }

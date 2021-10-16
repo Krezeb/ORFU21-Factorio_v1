@@ -2,26 +2,31 @@
 
 namespace ORFU21_Factorio_v1
 {
-    class Program
+    class Program:Inventory
     {
         static void Main(string[] args)
         {
             bool isRunning = true;
             Inventory initInventory = new Inventory();
-            Factory initFactory = new Factory();
+            //Factory initFactory = new Factory();
             initInventory.AddDefaultInventory();
-            
 
             while (isRunning)
             {
-                Console.Clear();
-                Console.WriteLine("------------Factorio v1------------");                
-                initInventory.GetMainInventory();
-                initInventory.GetSendList();
-                Console.WriteLine();
-                Console.WriteLine("-----------------------------------");
-                initInventory.SendToFactory();
-                //initFactory.WoodTable();
+                bool preProduction = true;
+                Factory initFactory = new Factory();
+
+                while (preProduction)
+                {
+                    Console.Clear();
+                    Console.WriteLine("------------Factorio v1------------");
+                    initInventory.GetMainInventory();
+                    initInventory.GetSendList();
+                    Console.WriteLine();
+                    Console.WriteLine("-----------------------------------");
+                    initInventory.SendToFactory();
+     
+                }
             }
         }
     }

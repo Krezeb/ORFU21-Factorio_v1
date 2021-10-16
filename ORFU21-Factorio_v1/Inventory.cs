@@ -7,33 +7,50 @@ using System.Threading.Tasks;
 
 namespace ORFU21_Factorio_v1
 {
-    class Inventory
+    class Inventory : Factory
     {
-        public List<ItemTypes> mainInventory = new List<ItemTypes>();
-        public List<ItemTypes> itemTypes = new List<ItemTypes>();
-        public List<ItemTypes> sendToFactory = new List<ItemTypes>();
+        //public List<ItemTypesEnum> _mainInventory = new List<ItemTypesEnum>();
+        //public List<ItemTypesEnum> _itemTypes = new List<ItemTypesEnum>();
+        //private List<ItemTypesEnum> _sendToFactory = new List<ItemTypesEnum>();
 
-            public int EmpID { get; set; }
-            public string EmpName { get; set; }
-            public int EmpSalary { get; set; }
+        //public List<ItemTypesEnum> SendToFactoryList // Lists items that are going to be sent to the factory
+        //{
+        //    get
+        //    { return _sendToFactory; }
+        //}
 
-        public void AddDefaultInventory()
+
+        //public void SendToFactory(ItemTypesEnum line) // adds items to the list that will be sent to the factory
+        //{
+        //    _sendToFactory.Add(line);
+        //}
+
+        //public void AddToMainInventory(ItemTypesEnum line) // adds items to main inventory. Not used atm
+        //{
+        //    _mainInventory.Add(line);
+        //}
+
+        //public void AddToItemTypes(ItemTypesEnum line) // adds items to Item Types list. Used for menus
+        //{
+        //    _itemTypes.Add(line);
+        //}
+
+        public void AddDefaultInventory() //Populates inventorys with base materials.
         {
-            mainInventory.Add(ItemTypes.Wood);
-            mainInventory.Add(ItemTypes.Wood);
-            mainInventory.Add(ItemTypes.Glass);
-            mainInventory.Add(ItemTypes.Glass);
-            mainInventory.Add(ItemTypes.Rubber);
-            mainInventory.Add(ItemTypes.Rubber);
-            mainInventory.Add(ItemTypes.Metal);
-            mainInventory.Add(ItemTypes.Metal);
+            AddToMainInventory(ItemTypesEnum.Wood);
+            AddToMainInventory(ItemTypesEnum.Wood);
+            AddToMainInventory(ItemTypesEnum.Glass);
+            AddToMainInventory(ItemTypesEnum.Glass);
+            AddToMainInventory(ItemTypesEnum.Rubber);
+            AddToMainInventory(ItemTypesEnum.Rubber);
+            AddToMainInventory(ItemTypesEnum.Metal);
+            AddToMainInventory(ItemTypesEnum.Metal);
 
-            itemTypes.Add(ItemTypes.Wood);
-            itemTypes.Add(ItemTypes.Glass);
-            itemTypes.Add(ItemTypes.Rubber);
-            itemTypes.Add(ItemTypes.Metal);
-        }     
-
+            AddToItemTypes(ItemTypesEnum.Wood);
+            AddToItemTypes(ItemTypesEnum.Glass);
+            AddToItemTypes(ItemTypesEnum.Rubber);
+            AddToItemTypes(ItemTypesEnum.Metal);
+        }
         public void GetMainInventory()
         {
             int metalCount = 0;
@@ -41,13 +58,13 @@ namespace ORFU21_Factorio_v1
             int glassCount = 0;
             int woodCount = 0;
             int woodTableCount = 0;
-            foreach (var item in mainInventory)
+            foreach (var item in _mainInventory)
             {
-                if (item == ItemTypes.Metal) metalCount++;
-                if (item == ItemTypes.Rubber) rubberCount++;
-                if (item == ItemTypes.Glass) glassCount++;
-                if (item == ItemTypes.Wood) woodCount++;
-                if (item == ItemTypes.WoodTable) woodTableCount++;
+                if (item == ItemTypesEnum.Metal) metalCount++;
+                if (item == ItemTypesEnum.Rubber) rubberCount++;
+                if (item == ItemTypesEnum.Glass) glassCount++;
+                if (item == ItemTypesEnum.Wood) woodCount++;
+                if (item == ItemTypesEnum.WoodTable) woodTableCount++;
             }
             Console.WriteLine("\nCurrently your warehouse holds:\n");
             Console.WriteLine($"{woodCount} x Wood");
@@ -56,7 +73,6 @@ namespace ORFU21_Factorio_v1
             Console.WriteLine($"{metalCount} x Metal");
             Console.WriteLine($"{woodTableCount} x Wooden Tables");
         }
-
         public void GetSendList()
         {
             int metalCount = 0;
@@ -64,13 +80,13 @@ namespace ORFU21_Factorio_v1
             int glassCount = 0;
             int woodCount = 0;
             int woodTableCount = 0;
-            foreach (var item in sendToFactory)
+            foreach (var item in FactoryInbox)
             {
-                if (item == ItemTypes.Metal) metalCount++;
-                if (item == ItemTypes.Rubber) rubberCount++;
-                if (item == ItemTypes.Glass) glassCount++;
-                if (item == ItemTypes.Wood) woodCount++;
-                if (item == ItemTypes.WoodTable) woodTableCount++;
+                if (item == ItemTypesEnum.Metal) metalCount++;
+                if (item == ItemTypesEnum.Rubber) rubberCount++;
+                if (item == ItemTypesEnum.Glass) glassCount++;
+                if (item == ItemTypesEnum.Wood) woodCount++;
+                if (item == ItemTypesEnum.WoodTable) woodTableCount++;
             }
             Console.WriteLine("\nYou are sending to the factory:\n");
             Console.WriteLine($"{woodCount} x Wood");
@@ -79,42 +95,80 @@ namespace ORFU21_Factorio_v1
             Console.WriteLine($"{metalCount} x Metal");
             Console.WriteLine($"{woodTableCount} x Wooden Tables");
         }
-
         public void SendToFactory()
         {
-            Console.WriteLine("\nWhat Material do you want to send to the Factory?\n");
-            for (int i = 0; i < itemTypes.Count; i++)
+            Console.WriteLine("\nWhat Material do you want to send to the Factory?");
+            Console.WriteLine("\n[0]: Initiate Production Run\n");
+            for (int i = 0; i < ItemTypes.Count; i++)
             {
-                var itemName = EnumBackend.GetDisplayName((ItemTypes)i);
-                Console.WriteLine($"[{i+1}]: {itemName}");
+                var itemName = EnumBackend.GetDisplayName((ItemTypesEnum)i);
+                Console.WriteLine($"[{i + 1}]: {itemName}");
             }
             Console.Write("\nSvar: ");
-            string input = Console.ReadLine();            
+            string input = Console.ReadLine();
+
             switch (input)
             {
                 case "1": //Wood
                     {
-                        sendToFactory.Add(ItemTypes.Wood);
-                        mainInventory.Remove(ItemTypes.Wood);
-                        return;
+                        if (_mainInventory.Contains(ItemTypesEnum.Wood))
+                        {
+                            AddToFactoryInbox(ItemTypesEnum.Wood);
+                            SendToFactory(ItemTypesEnum.Wood);
+                            _mainInventory.Remove(ItemTypesEnum.Wood);
+                            return;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 case "2": //Glass
                     {
-                        sendToFactory.Add(ItemTypes.Glass);
-                        mainInventory.Remove(ItemTypes.Glass);
-                        return;
+                        if (_mainInventory.Contains(ItemTypesEnum.Glass))
+                        {
+                            AddToFactoryInbox(ItemTypesEnum.Glass);
+                            SendToFactory(ItemTypesEnum.Glass);
+                            _mainInventory.Remove(ItemTypesEnum.Glass);
+                            return;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 case "3": //Rubber
                     {
-                        sendToFactory.Add(ItemTypes.Rubber);
-                        mainInventory.Remove(ItemTypes.Rubber);
-                        return;
+                        if (_mainInventory.Contains(ItemTypesEnum.Rubber))
+                        {
+                            AddToFactoryInbox(ItemTypesEnum.Rubber);
+                            SendToFactory(ItemTypesEnum.Rubber);
+                            _mainInventory.Remove(ItemTypesEnum.Rubber);
+                            return;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 case "4": //Metal
                     {
-                        sendToFactory.Add(ItemTypes.Metal);
-                        mainInventory.Remove(ItemTypes.Metal);
-                        return;
+                        if (_mainInventory.Contains(ItemTypesEnum.Metal))
+                        {
+                            AddToFactoryInbox(ItemTypesEnum.Metal);
+                            SendToFactory(ItemTypesEnum.Metal);
+                            _mainInventory.Remove(ItemTypesEnum.Metal);
+                            return;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                case "0": //Start Run
+                    {
+                        CheckBlueprints();
+                        break; ;
                     }
                 default:
                     return;

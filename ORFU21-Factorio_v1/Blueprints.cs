@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace ORFU21_Factorio_v1
 {
-    class Blueprints : Inventory
+    class Blueprints
     {
-        public void WoodTable()
-        {
-            if (mainInventory.Contains(ItemTypes.Wood))
-            {
-                mainInventory.Add(ItemTypes.WoodTable);
-                for (int i = 0; i < 3; i++)
-                {
-                    mainInventory.Remove(ItemTypes.Wood);
-                }
-            }
-        }
+        //public void WoodTable()
+        //{
+        //    if (_mainInventory.Contains(ItemTypes.Wood))
+        //    {
+        //        _mainInventory.Add(ItemTypes.WoodTable);
+        //        for (int i = 0; i < 3; i++)
+        //        {
+        //            _mainInventory.Remove(ItemTypes.Wood);
+        //        }
+        //    }
+        //}
     }
 }
