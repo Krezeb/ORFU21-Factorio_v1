@@ -9,34 +9,10 @@ namespace ORFU21_Factorio_v1
 {
     class Inventory : Factory
     {
-        //public List<ItemTypesEnum> _mainInventory = new List<ItemTypesEnum>();
-        //public List<ItemTypesEnum> _itemTypes = new List<ItemTypesEnum>();
-        //private List<ItemTypesEnum> _sendToFactory = new List<ItemTypesEnum>();
-
-        //public List<ItemTypesEnum> SendToFactoryList // Lists items that are going to be sent to the factory
-        //{
-        //    get
-        //    { return _sendToFactory; }
-        //}
-
-
-        //public void SendToFactory(ItemTypesEnum line) // adds items to the list that will be sent to the factory
-        //{
-        //    _sendToFactory.Add(line);
-        //}
-
-        //public void AddToMainInventory(ItemTypesEnum line) // adds items to main inventory. Not used atm
-        //{
-        //    _mainInventory.Add(line);
-        //}
-
-        //public void AddToItemTypes(ItemTypesEnum line) // adds items to Item Types list. Used for menus
-        //{
-        //    _itemTypes.Add(line);
-        //}
-
         public void AddDefaultInventory() //Populates inventorys with base materials.
         {
+            AddToMainInventory(ItemTypesEnum.Wood);
+            AddToMainInventory(ItemTypesEnum.Wood);
             AddToMainInventory(ItemTypesEnum.Wood);
             AddToMainInventory(ItemTypesEnum.Wood);
             AddToMainInventory(ItemTypesEnum.Glass);
@@ -53,11 +29,11 @@ namespace ORFU21_Factorio_v1
         }
         public void GetMainInventory()
         {
-            int metalCount = 0;
-            int rubberCount = 0;
-            int glassCount = 0;
-            int woodCount = 0;
-            int woodTableCount = 0;
+            int woodCount = 0, woodTableCount = 0;
+            int metalCount = 0, metalTableCount = 0;
+            int rubberCount = 0, rubberTableCount = 0;
+            int glassCount = 0, glassTableCount = 0;
+            
             foreach (var item in _mainInventory)
             {
                 if (item == ItemTypesEnum.Metal) metalCount++;
@@ -65,13 +41,15 @@ namespace ORFU21_Factorio_v1
                 if (item == ItemTypesEnum.Glass) glassCount++;
                 if (item == ItemTypesEnum.Wood) woodCount++;
                 if (item == ItemTypesEnum.WoodTable) woodTableCount++;
+                if (item == ItemTypesEnum.RubberTable) rubberTableCount++;
+                if (item == ItemTypesEnum.GlassTable) glassTableCount++;
+                if (item == ItemTypesEnum.MetalTable) metalTableCount++;
             }
             Console.WriteLine("\nCurrently your warehouse holds:\n");
-            Console.WriteLine($"{woodCount} x Wood");
-            Console.WriteLine($"{glassCount} x Glass");
-            Console.WriteLine($"{rubberCount} x Rubber");
-            Console.WriteLine($"{metalCount} x Metal");
-            Console.WriteLine($"{woodTableCount} x Wooden Tables");
+            Console.WriteLine("{0,-20} {1,-20}", woodCount + " x Wood" , woodTableCount + " x Wood Tables");
+            Console.WriteLine("{0,-20} {1,-20}", glassCount + " x Glass", glassTableCount + " x Glass Tables");
+            Console.WriteLine("{0,-20} {1,-20}", rubberCount + " x Rubber", rubberTableCount + " x Rubber Tables");
+            Console.WriteLine("{0,-20} {1,-20}", metalCount + " x Metal", metalTableCount + " x Metal Tables");
         }
         public void GetSendList()
         {
@@ -93,7 +71,6 @@ namespace ORFU21_Factorio_v1
             Console.WriteLine($"{glassCount} x Glass");
             Console.WriteLine($"{rubberCount} x Rubber");
             Console.WriteLine($"{metalCount} x Metal");
-            Console.WriteLine($"{woodTableCount} x Wooden Tables");
         }
         public void SendToFactory()
         {

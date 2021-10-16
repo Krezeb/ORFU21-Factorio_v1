@@ -12,7 +12,7 @@ namespace ORFU21_Factorio_v1
         public List<ItemTypesEnum> _itemTypes = new List<ItemTypesEnum>();
         private List<ItemTypesEnum> _sendToFactory = new List<ItemTypesEnum>();
         private List<ItemTypesEnum> _factoryInbox = new List<ItemTypesEnum>();
-        private List<ItemTypesEnum> _productionBin = new List<ItemTypesEnum>();
+        private List<BlueprintEnum> _activeBluePrints = new List<BlueprintEnum>();
 
         //---------------------------------------------------------------------------------------------------------------
 
@@ -37,8 +37,8 @@ namespace ORFU21_Factorio_v1
         public void AddToMainInventory(ItemTypesEnum line) // adds items to main inventory. Not used atm
         {
             _mainInventory.Add(line);
-        }
 
+        }
         //---------------------------------------------------------------------------------------------------------------
 
         public bool bp01, bp02, bp03, bp04;
@@ -49,57 +49,84 @@ namespace ORFU21_Factorio_v1
             { return _factoryInbox; }
         }
 
+        public List<BlueprintEnum> BluePrintList
+        {
+            get
+            { return _activeBluePrints; }
+        }
+
         public void AddToFactoryInbox(ItemTypesEnum line)
         {
             FactoryInbox.Add(line);
+        }
+        public void RemoveFromSendToFactory(ItemTypesEnum line)
+        {
+            SendToFactoryList.Remove(line);
         }
         public void RemoveFromFactoryInbox(ItemTypesEnum line)
         {
             FactoryInbox.Remove(line);
         }
 
-        public void AddToProdBin(ItemTypesEnum line)
+        public void AddToActiveBlueprints(BlueprintEnum line)
         {
-            FactoryInbox.Add(line);
+            BluePrintList.Add(line);
         }
 
         public void CheckBlueprints()
         {
-            List<bool> _possibleBlueprints = new List<bool>();
-
             int metalCount = 0;
             int rubberCount = 0;
             int glassCount = 0;
             int woodCount = 0;
-            int woodTableCount = 0;
 
             foreach (var item in FactoryInbox)
             {
                 if (item == ItemTypesEnum.Metal) metalCount++;
-                if (item == ItemTypesEnum.Rubber) rubberCount++;
                 if (item == ItemTypesEnum.Glass) glassCount++;
+                if (item == ItemTypesEnum.Rubber) rubberCount++;
                 if (item == ItemTypesEnum.Wood) woodCount++;
-                if (item == ItemTypesEnum.WoodTable) woodTableCount++;
             }
 
-
-            if (woodCount == 2) //Wooden Table
+            if (woodCount >= 2) //Wooden Table
             {
                 bp01 = true;
-                AddToProdBin(ItemTypesEnum.Wood);
-                AddToProdBin(ItemTypesEnum.Wood);
+                AddToActiveBlueprints(BlueprintEnum.WoodTableBP);
+                AddToMainInventory(ItemTypesEnum.WoodTable);
+                RemoveFromFactoryInbox(ItemTypesEnum.Wood);
+                RemoveFromSendToFactory(ItemTypesEnum.Wood);
+                RemoveFromFactoryInbox(ItemTypesEnum.Wood);
+                RemoveFromSendToFactory(ItemTypesEnum.Wood);
             }
-            if (woodCount == 1 && glassCount == 1) //Glass Tables
+            if (woodCount >= 1 && glassCount >= 1) //Glass Tables
             {
                 bp02 = true;
+                AddToActiveBlueprints(BlueprintEnum.GlassTableBP);
+                AddToMainInventory(ItemTypesEnum.GlassTable);
+                RemoveFromFactoryInbox(ItemTypesEnum.Glass);
+                RemoveFromSendToFactory(ItemTypesEnum.Glass);
+                RemoveFromFactoryInbox(ItemTypesEnum.Wood);
+                RemoveFromSendToFactory(ItemTypesEnum.Wood);
             }
-            if (woodCount == 1 && rubberCount == 1) //Rubber Table(???)
+            if (woodCount >= 1 && rubberCount >= 1) //Rubber Table (https://i.imgur.com/DQ0E3d0h.jpg)
             {
                 bp03 = true;
+                AddToActiveBlueprints(BlueprintEnum.RubberTableBP);
+                AddToMainInventory(ItemTypesEnum.RubberTable);
+                RemoveFromFactoryInbox(ItemTypesEnum.Rubber);
+                RemoveFromSendToFactory(ItemTypesEnum.Rubber);
+                RemoveFromFactoryInbox(ItemTypesEnum.Wood);
+                RemoveFromSendToFactory(ItemTypesEnum.Wood);
             }
-            if (woodCount == 1 && metalCount == 1) //Metal Table
+            if (woodCount >= 1 && metalCount >= 1) //Metal Table
             {
                 bp04 = true;
+                AddToActiveBlueprints(BlueprintEnum.MetalTableBP);
+                AddToMainInventory(ItemTypesEnum.MetalTable);
+                RemoveFromFactoryInbox(ItemTypesEnum.Metal);
+                RemoveFromSendToFactory(ItemTypesEnum.Metal);
+                RemoveFromFactoryInbox(ItemTypesEnum.Wood);
+                RemoveFromSendToFactory(ItemTypesEnum.Wood);
             }
             else if (bp01 == false && bp02 == false && bp03 == false && bp04 == false)
             {
@@ -107,21 +134,25 @@ namespace ORFU21_Factorio_v1
                 {
                     RemoveFromFactoryInbox(ItemTypesEnum.Wood);
                     AddToMainInventory(ItemTypesEnum.Wood);
+                    RemoveFromSendToFactory(ItemTypesEnum.Wood);
                 }
                 while (_factoryInbox.Contains(ItemTypesEnum.Glass))
                 {
                     RemoveFromFactoryInbox(ItemTypesEnum.Glass);
                     AddToMainInventory(ItemTypesEnum.Glass);
+                    RemoveFromSendToFactory(ItemTypesEnum.Glass);
                 }
                 while (_factoryInbox.Contains(ItemTypesEnum.Rubber))
                 {
                     RemoveFromFactoryInbox(ItemTypesEnum.Rubber);
                     AddToMainInventory(ItemTypesEnum.Rubber);
+                    RemoveFromSendToFactory(ItemTypesEnum.Rubber);
                 }
                 while (_factoryInbox.Contains(ItemTypesEnum.Metal))
                 {
                     RemoveFromFactoryInbox(ItemTypesEnum.Metal);
                     AddToMainInventory(ItemTypesEnum.Metal);
+                    RemoveFromSendToFactory(ItemTypesEnum.Metal);
                 }
             }
 
